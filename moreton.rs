@@ -1,3 +1,107 @@
+// =============================================================================
+// ADDITIONAL USEFUL STD LIBRARY WRAPPERS FOR DEBUGGING
+// =============================================================================
+
+#[cfg(debug_assertions)]
+#[inline(never)]
+pub unsafe fn d_transmute<T, U>(t: T) -> U {
+    std::mem::transmute(t)
+}
+
+#[cfg(debug_assertions)]
+#[inline(never)]
+pub fn d_replace<T>(dest: &mut T, src: T) -> T {
+    std::mem::replace(dest, src)
+}
+
+#[cfg(debug_assertions)]
+#[inline(never)]
+pub fn d_swap<T>(a: &mut T, b: &mut T) {
+    std::mem::swap(a, b)
+}
+
+#[cfg(debug_assertions)]
+#[inline(never)]
+pub unsafe fn d_ptr_read<T>(src: *const T) -> T {
+    std::ptr::read(src)
+}
+
+#[cfg(debug_assertions)]
+#[inline(never)]
+pub unsafe fn d_ptr_write<T>(dst: *mut T, val: T) {
+    std::ptr::write(dst, val)
+}
+
+#[cfg(debug_assertions)]
+#[inline(never)]
+pub fn d_type_name<T>() -> &'static str {
+    std::any::type_name::<T>()
+}
+
+#[cfg(debug_assertions)]
+#[inline(never)]
+pub fn d_try_from<T, U>(u: U) -> Result<T, U::Error> where T: std::convert::TryFrom<U> {
+    T::try_from(u)
+}
+
+#[cfg(debug_assertions)]
+#[inline(never)]
+pub fn d_deref<T>(t: &T) -> &T::Target where T: std::ops::Deref {
+    &**t
+}
+
+#[cfg(debug_assertions)]
+#[inline(never)]
+pub fn d_deref_mut<T>(t: &mut T) -> &mut T::Target where T: std::ops::DerefMut {
+    &mut **t
+}
+
+// Collection helpers
+#[cfg(debug_assertions)]
+#[inline(never)]
+pub fn d_vec_len<T>(v: &Vec<T>) -> usize {
+    v.len()
+}
+
+#[cfg(debug_assertions)]
+#[inline(never)]
+pub fn d_hashmap_len<K, V>(m: &std::collections::HashMap<K, V>) -> usize {
+    m.len()
+}
+
+#[cfg(debug_assertions)]
+#[inline(never)]
+pub fn d_vecdeque_len<T>(v: &std::collections::VecDeque<T>) -> usize {
+    v.len()
+}
+
+// Environment variable
+#[cfg(debug_assertions)]
+#[inline(never)]
+pub fn d_env_var(key: &str) -> Option<String> {
+    std::env::var(key).ok()
+}
+
+// Thread info
+#[cfg(debug_assertions)]
+#[inline(never)]
+pub fn d_thread_name() -> Option<String> {
+    std::thread::current().name().map(|s| s.to_string())
+}
+
+// Timing
+#[cfg(debug_assertions)]
+#[inline(never)]
+pub fn d_instant_now() -> std::time::Instant {
+    std::time::Instant::now()
+}
+
+// Debug printing
+#[cfg(debug_assertions)]
+#[inline(never)]
+pub fn d_debug<T: std::fmt::Debug>(val: &T) {
+    println!("DEBUG: {:?}", val);
+}
 #![allow(dead_code)]
 
 // =============================================================================
@@ -238,6 +342,60 @@ pub fn d_inspect<T: std::fmt::Debug>(value: &T) -> &T {
 }
 
 // =============================================================================
+// FORCE LINKER TO KEEP SYMBOLS (so GDB can find them)
+// =============================================================================
+
+#[cfg(debug_assertions)]
+#[inline(never)]
+pub fn _force_link_all() {
+    // This function ACTUALLY calls all debug helpers so the linker keeps them
+    // The calls are real but operate on dummy data, so there's minimal runtime cost
+    let s = "";
+    let _ = d_trim(s);
+    let _ = d_trim_start(s);
+    let _ = d_trim_end(s);
+    let _ = d_trim_matches(s, ' ');
+    let _ = d_trim_end_matches(s, ' ');
+    let _ = d_len(s);
+    let _ = d_is_empty(s);
+    let _ = d_contains(s, "");
+    let _ = d_starts_with(s, "");
+    let _ = d_ends_with(s, "");
+    let _ = d_split_once(s, "");
+    let _ = d_to_lowercase(s);
+    let _ = d_to_uppercase(s);
+    let _ = d_parse_i32(s);
+    let _ = d_parse_i64(s);
+    let _ = d_parse_u32(s);
+    let _ = d_parse_u64(s);
+    let _ = d_parse_f64(s);
+    let _ = d_parse_bool(s);
+    
+    let v: Vec<i32> = vec![];
+    let _ = d_vec_len(&v);
+    let _ = d_vec_is_empty(&v);
+    let _ = d_vec_capacity(&v);
+    d_vec_print_first(&v);
+    d_vec_print_last(&v);
+    d_vec_print_get(&v, 0);
+    d_vec_print_all(&v);
+    
+    let opt: Option<i32> = None;
+    let _ = d_is_some(&opt);
+    let _ = d_is_none(&opt);
+    d_opt_print(&opt);
+    
+    let res: Result<i32, ()> = Ok(0);
+    let _ = d_is_ok(&res);
+    let _ = d_is_err(&res);
+    d_result_print(&res);
+    
+    d_print(&s);
+    d_print_labeled("", &s);
+    let _ = d_inspect(&s);
+}
+
+// =============================================================================
 // CUSTOM PROJECT-SPECIFIC HELPERS
 // =============================================================================
 // Add your own domain-specific helpers below this line
@@ -273,3 +431,73 @@ $3 = 5
 (gdb) call debug_helpers::d_vec_print_first(&my_vec)
 First: Some(42)
 */
+
+// =============================================================================
+// COMMON RUST STD LIBRARY WRAPPERS FOR DEBUGGING
+// =============================================================================
+
+#[cfg(debug_assertions)]
+#[inline(never)]
+pub fn d_size_of<T>() -> usize {
+    std::mem::size_of::<T>()
+}
+
+#[cfg(debug_assertions)]
+#[inline(never)]
+pub fn d_align_of<T>() -> usize {
+    std::mem::align_of::<T>()
+}
+
+#[cfg(debug_assertions)]
+#[inline(never)]
+pub fn d_null<T>() -> *const T {
+    std::ptr::null::<T>()
+}
+
+#[cfg(debug_assertions)]
+#[inline(never)]
+pub fn d_null_mut<T>() -> *mut T {
+    std::ptr::null_mut::<T>()
+}
+
+#[cfg(debug_assertions)]
+#[inline(never)]
+pub fn d_from_utf8(v: &[u8]) -> Result<&str, std::str::Utf8Error> {
+    std::str::from_utf8(v)
+}
+
+#[cfg(debug_assertions)]
+#[inline(never)]
+pub fn d_slice_from_raw_parts<'a, T>(data: *const T, len: usize) -> &'a [T] {
+    unsafe { std::slice::from_raw_parts(data, len) }
+}
+
+#[cfg(debug_assertions)]
+#[inline(never)]
+pub fn d_slice_from_raw_parts_mut<'a, T>(data: *mut T, len: usize) -> &'a mut [T] {
+    unsafe { std::slice::from_raw_parts_mut(data, len) }
+}
+
+#[cfg(debug_assertions)]
+#[inline(never)]
+pub fn d_min<T: Ord>(a: T, b: T) -> T {
+    std::cmp::min(a, b)
+}
+
+#[cfg(debug_assertions)]
+#[inline(never)]
+pub fn d_max<T: Ord>(a: T, b: T) -> T {
+    std::cmp::max(a, b)
+}
+
+#[cfg(debug_assertions)]
+#[inline(never)]
+pub fn d_option_is_some<T>(opt: Option<T>) -> bool {
+    opt.is_some()
+}
+
+#[cfg(debug_assertions)]
+#[inline(never)]
+pub fn d_result_is_ok<T, E>(res: Result<T, E>) -> bool {
+    res.is_ok()
+}
