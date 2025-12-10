@@ -7,7 +7,7 @@ Using Termdebug I can never call rust functions on the fly to check what return 
 
 ##Usage:
 1. Drop this file into your project's src/ directory
-2. Add to your main.rs or lib.rs: mod debug_helpers;
+2. Add to your main.rs or lib.rs: mod moreton;
 3. Compile with debug symbols: cargo build
 4. In GDB at breakpoint: call debug_helpers::d_trim(my_string)
 
