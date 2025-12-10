@@ -1,0 +1,275 @@
+#![allow(dead_code)]
+
+// =============================================================================
+// STRING OPERATIONS
+// =============================================================================
+
+#[cfg(debug_assertions)]
+#[inline(never)]
+pub fn d_trim(s: &str) -> &str {
+    s.trim()
+}
+
+#[cfg(debug_assertions)]
+#[inline(never)]
+pub fn d_trim_start(s: &str) -> &str {
+    s.trim_start()
+}
+
+#[cfg(debug_assertions)]
+#[inline(never)]
+pub fn d_trim_end(s: &str) -> &str {
+    s.trim_end()
+}
+
+#[cfg(debug_assertions)]
+#[inline(never)]
+pub fn d_trim_matches(s: &str, pat: char) -> &str {
+    s.trim_matches(pat)
+}
+
+#[cfg(debug_assertions)]
+#[inline(never)]
+pub fn d_trim_end_matches(s: &str, pat: char) -> &str {
+    s.trim_end_matches(pat)
+}
+
+#[cfg(debug_assertions)]
+#[inline(never)]
+pub fn d_len(s: &str) -> usize {
+    s.len()
+}
+
+#[cfg(debug_assertions)]
+#[inline(never)]
+pub fn d_is_empty(s: &str) -> bool {
+    s.is_empty()
+}
+
+#[cfg(debug_assertions)]
+#[inline(never)]
+pub fn d_contains(s: &str, pat: &str) -> bool {
+    s.contains(pat)
+}
+
+#[cfg(debug_assertions)]
+#[inline(never)]
+pub fn d_starts_with(s: &str, pat: &str) -> bool {
+    s.starts_with(pat)
+}
+
+#[cfg(debug_assertions)]
+#[inline(never)]
+pub fn d_ends_with(s: &str, pat: &str) -> bool {
+    s.ends_with(pat)
+}
+
+#[cfg(debug_assertions)]
+#[inline(never)]
+pub fn d_split_once<'a>(s: &'a str, delim: &str) -> Option<(&'a str, &'a str)> {
+    s.split_once(delim)
+}
+
+#[cfg(debug_assertions)]
+#[inline(never)]
+pub fn d_to_lowercase(s: &str) -> String {
+    s.to_lowercase()
+}
+
+#[cfg(debug_assertions)]
+#[inline(never)]
+pub fn d_to_uppercase(s: &str) -> String {
+    s.to_uppercase()
+}
+
+// =============================================================================
+// PARSING OPERATIONS
+// =============================================================================
+
+#[cfg(debug_assertions)]
+#[inline(never)]
+pub fn d_parse_i32(s: &str) -> Option<i32> {
+    s.parse::<i32>().ok()
+}
+
+#[cfg(debug_assertions)]
+#[inline(never)]
+pub fn d_parse_i64(s: &str) -> Option<i64> {
+    s.parse::<i64>().ok()
+}
+
+#[cfg(debug_assertions)]
+#[inline(never)]
+pub fn d_parse_u32(s: &str) -> Option<u32> {
+    s.parse::<u32>().ok()
+}
+
+#[cfg(debug_assertions)]
+#[inline(never)]
+pub fn d_parse_u64(s: &str) -> Option<u64> {
+    s.parse::<u64>().ok()
+}
+
+#[cfg(debug_assertions)]
+#[inline(never)]
+pub fn d_parse_f64(s: &str) -> Option<f64> {
+    s.parse::<f64>().ok()
+}
+
+#[cfg(debug_assertions)]
+#[inline(never)]
+pub fn d_parse_bool(s: &str) -> Option<bool> {
+    s.parse::<bool>().ok()
+}
+
+// =============================================================================
+// VEC OPERATIONS
+// =============================================================================
+
+#[cfg(debug_assertions)]
+#[inline(never)]
+pub fn d_vec_len<T>(v: &Vec<T>) -> usize {
+    v.len()
+}
+
+#[cfg(debug_assertions)]
+#[inline(never)]
+pub fn d_vec_is_empty<T>(v: &Vec<T>) -> bool {
+    v.is_empty()
+}
+
+#[cfg(debug_assertions)]
+#[inline(never)]
+pub fn d_vec_capacity<T>(v: &Vec<T>) -> usize {
+    v.capacity()
+}
+
+// Note: Can't return &T easily in GDB, so we'll use print functions
+#[cfg(debug_assertions)]
+#[inline(never)]
+pub fn d_vec_print_first<T: std::fmt::Debug>(v: &Vec<T>) {
+    eprintln!("First: {:?}", v.first());
+}
+
+#[cfg(debug_assertions)]
+#[inline(never)]
+pub fn d_vec_print_last<T: std::fmt::Debug>(v: &Vec<T>) {
+    eprintln!("Last: {:?}", v.last());
+}
+
+#[cfg(debug_assertions)]
+#[inline(never)]
+pub fn d_vec_print_get<T: std::fmt::Debug>(v: &Vec<T>, idx: usize) {
+    eprintln!("v[{}]: {:?}", idx, v.get(idx));
+}
+
+#[cfg(debug_assertions)]
+#[inline(never)]
+pub fn d_vec_print_all<T: std::fmt::Debug>(v: &Vec<T>) {
+    eprintln!("Vec contents: {:?}", v);
+}
+
+// =============================================================================
+// OPTION OPERATIONS
+// =============================================================================
+
+#[cfg(debug_assertions)]
+#[inline(never)]
+pub fn d_is_some<T>(opt: &Option<T>) -> bool {
+    opt.is_some()
+}
+
+#[cfg(debug_assertions)]
+#[inline(never)]
+pub fn d_is_none<T>(opt: &Option<T>) -> bool {
+    opt.is_none()
+}
+
+#[cfg(debug_assertions)]
+#[inline(never)]
+pub fn d_opt_print<T: std::fmt::Debug>(opt: &Option<T>) {
+    eprintln!("Option: {:?}", opt);
+}
+
+// =============================================================================
+// RESULT OPERATIONS
+// =============================================================================
+
+#[cfg(debug_assertions)]
+#[inline(never)]
+pub fn d_is_ok<T, E>(res: &Result<T, E>) -> bool {
+    res.is_ok()
+}
+
+#[cfg(debug_assertions)]
+#[inline(never)]
+pub fn d_is_err<T, E>(res: &Result<T, E>) -> bool {
+    res.is_err()
+}
+
+#[cfg(debug_assertions)]
+#[inline(never)]
+pub fn d_result_print<T: std::fmt::Debug, E: std::fmt::Debug>(res: &Result<T, E>) {
+    eprintln!("Result: {:?}", res);
+}
+
+// =============================================================================
+// PRINT UTILITIES (for when GDB can't display complex types)
+// =============================================================================
+
+#[cfg(debug_assertions)]
+#[inline(never)]
+pub fn d_print<T: std::fmt::Debug>(value: &T) {
+    eprintln!("DEBUG: {:?}", value);
+}
+
+#[cfg(debug_assertions)]
+#[inline(never)]
+pub fn d_print_labeled<T: std::fmt::Debug>(label: &str, value: &T) {
+    eprintln!("DEBUG [{}]: {:?}", label, value);
+}
+
+// Print and return (useful for checking without interrupting flow)
+#[cfg(debug_assertions)]
+#[inline(never)]
+pub fn d_inspect<T: std::fmt::Debug>(value: &T) -> &T {
+    eprintln!("INSPECT: {:?}", value);
+    value
+}
+
+// =============================================================================
+// CUSTOM PROJECT-SPECIFIC HELPERS
+// =============================================================================
+// Add your own domain-specific helpers below this line
+// Example:
+//
+// #[cfg(debug_assertions)]
+// #[inline(never)]
+// pub fn d_parse_my_format(s: &str) -> Option<MyType> {
+//     // Your custom parsing logic
+// }
+
+// =============================================================================
+// USAGE EXAMPLES (commented out, for reference)
+// =============================================================================
+
+/*
+In GDB:
+
+(gdb) break main.rs:42
+(gdb) run
+(gdb) call debug_helpers::d_trim(my_string)
+$1 = "trimmed content"
+
+(gdb) call debug_helpers::d_split_once("key=value", "=")
+$2 = Some(("key", "value"))
+
+(gdb) call debug_helpers::d_print(&my_complex_struct)
+DEBUG: MyStruct { field1: 42, field2: "hello" }
+
+(gdb) call debug_helpers::d_vec_len(&my_vec)
+$3 = 5
+
+(gdb) call debug_helpers::d_vec_print_first(&my_vec)
+First: Some(42)
+*/
