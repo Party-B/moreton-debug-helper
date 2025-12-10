@@ -238,62 +238,6 @@ pub fn d_inspect<T: std::fmt::Debug>(value: &T) -> &T {
 }
 
 // =============================================================================
-// FORCE LINKER TO KEEP SYMBOLS (so GDB can find them)
-// =============================================================================
-
-#[cfg(debug_assertions)]
-#[inline(never)]
-pub fn _force_link_all() {
-    // This function references all debug helpers so the linker keeps them
-    // It's never actually called, but the reference prevents elimination
-    if false {
-        let s = "";
-        let _ = d_trim(s);
-        let _ = d_trim_start(s);
-        let _ = d_trim_end(s);
-        let _ = d_trim_matches(s, ' ');
-        let _ = d_trim_end_matches(s, ' ');
-        let _ = d_len(s);
-        let _ = d_is_empty(s);
-        let _ = d_contains(s, "");
-        let _ = d_starts_with(s, "");
-        let _ = d_ends_with(s, "");
-        let _ = d_split_once(s, "");
-        let _ = d_to_lowercase(s);
-        let _ = d_to_uppercase(s);
-        let _ = d_parse_i32(s);
-        let _ = d_parse_i64(s);
-        let _ = d_parse_u32(s);
-        let _ = d_parse_u64(s);
-        let _ = d_parse_f64(s);
-        let _ = d_parse_bool(s);
-        
-        let v: Vec<i32> = vec![];
-        let _ = d_vec_len(&v);
-        let _ = d_vec_is_empty(&v);
-        let _ = d_vec_capacity(&v);
-        d_vec_print_first(&v);
-        d_vec_print_last(&v);
-        d_vec_print_get(&v, 0);
-        d_vec_print_all(&v);
-        
-        let opt: Option<i32> = None;
-        let _ = d_is_some(&opt);
-        let _ = d_is_none(&opt);
-        d_opt_print(&opt);
-        
-        let res: Result<i32, ()> = Ok(0);
-        let _ = d_is_ok(&res);
-        let _ = d_is_err(&res);
-        d_result_print(&res);
-        
-        d_print(&s);
-        d_print_labeled("", &s);
-        let _ = d_inspect(&s);
-    }
-}
-
-// =============================================================================
 // CUSTOM PROJECT-SPECIFIC HELPERS
 // =============================================================================
 // Add your own domain-specific helpers below this line
